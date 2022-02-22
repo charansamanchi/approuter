@@ -1,0 +1,38 @@
+_schema-version: "3.2"
+ID: techbyte
+version: 0.0.1
+modules:
+- name: techbyte-approuter
+  type: approuter.nodejs
+  path: techbyte-approuter
+  requires:
+  - name: techbyte_html_repo_runtime
+  - name: uaa_techbyte
+  parameters:
+    disk-quota: 256M
+    memory: 256M
+- name: techbyte_ui_deployer
+  type: com.sap.application.content
+  path: .
+  requires:
+  - name: techbyte_html_repo_host
+    parameters:
+      content-target: true
+resources:
+- name: techbyte_html_repo_runtime
+  type: org.cloudfoundry.managed-service
+  parameters:
+    service: html5-apps-repo
+    service-plan: app-runtime
+- name: uaa_techbyte
+  type: org.cloudfoundry.managed-service
+  parameters:
+    path: ./xs-security.json
+    service: xsuaa
+    service-name: techbyte-xsuaa-service
+    service-plan: application
+- name: techbyte_html_repo_host
+  type: org.cloudfoundry.managed-service
+  parameters:
+    service: html5-apps-repo
+    service-plan: app-host
